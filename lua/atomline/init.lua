@@ -50,7 +50,7 @@ function M.apply_syntax()
   hl(0, "AtomLinePerson",       { fg = "#8BE9FD" })              -- ~person
   hl(0, "AtomLinePlace",        { fg = "#FFB86C" })              -- @place
   hl(0, "AtomLineDeadline",     { fg = "#FF5555", underline = true })
-  hl(0, "AtomLineSeparator",    { fg = "#6272a4", italic = true })
+  hl(0, "AtomLineSeparator",    { fg = "#6272a4" })
   hl(0, "AtomLineTime",         { fg = "#8BE9FD", italic = false })
 
   vim.cmd([[
