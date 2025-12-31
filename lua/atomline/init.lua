@@ -148,4 +148,8 @@ end
 
 -- 插入時間戳記
 function M.insert_timestamp()
-  local timestamp = os.date("%
+  local timestamp = os.date("%Y-%m-%d %H:%M %a | ")
+  vim.api.nvim_put({timestamp}, "c", true, true)
+end
+
+return M
