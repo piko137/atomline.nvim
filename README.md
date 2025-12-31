@@ -1,1 +1,1 @@
-# atomline.nvm
+# atomline.nvim
