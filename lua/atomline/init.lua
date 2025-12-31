@@ -1,10 +1,10 @@
 local M = {}
 
 function M.setup()
-  -- 1. 執行高亮 (內含強制刷新邏輯)
+  -- 執行高亮 (內含強制刷新邏輯)
   M.apply_syntax()
 
-  -- 2. 設定 Buffer 局部選項
+  -- 設定 Buffer 局部選項
   local set = vim.opt_local
   set.expandtab = true
   set.shiftwidth = 2
@@ -14,12 +14,38 @@ function M.setup()
   set.foldexpr = "v:lua.require'atomline'.fold_expr(v:lnum)"
   set.foldlevel = 99
 
-  -- 3. 綁定快捷鍵
+  -- 綁定快捷鍵
   local opts = { buffer = true, silent = true }
   vim.keymap.set('n', '<leader>x', M.toggle_status, { buffer = true, desc = "AtomLine: Toggle Status" })
   vim.keymap.set('n', '<leader>ts', M.insert_timestamp, { buffer = true, desc = "AtomLine: Timestamp" })
   vim.keymap.set('i', '<CR>', M.smart_newline, { buffer = true, expr = true })
   vim.keymap.set('n', 'za', 'za', opts)
+end
+
+-- [篩選未完成任務] 使用 Quickfix List
+function M.filter_unfinished()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local qf_list = {}
+  local bufnr = vim.api.nvim_get_current_buf()
+
+  for i, line in ipairs(lines) do
+    -- 搜尋包含 [.] 或 [/] 的行
+    if line:find("%[%.%]") or line:find("%[/%]") then
+      table.insert(qf_list, {
+        bufnr = bufnr,
+        lnum = i,
+        text = line:gsub("^%s+", ""), -- 去除行首空格讓清單更整齊
+      })
+    end
+  end
+
+  if #qf_list > 0 then
+    vim.fn.setqflist(qf_list)
+    vim.cmd("copen") -- 開啟 Quickfix 視窗
+    print("Found " .. #qf_list .. " unfinished tasks.")
+  else
+    print("All tasks completed! Good job.")
+  end
 end
 
 function M.apply_syntax()
