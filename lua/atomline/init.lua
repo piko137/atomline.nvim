@@ -20,6 +20,8 @@ function M.setup()
   vim.keymap.set('n', '<leader>ts', M.insert_timestamp, { buffer = true, desc = "AtomLine: Timestamp" })
   vim.keymap.set('i', '<CR>', M.smart_newline, { buffer = true, expr = true })
   vim.keymap.set('n', 'za', 'za', opts)
+  -- 篩選未完成任務
+  vim.keymap.set('n', '<leader>f', M.filter_unfinished, { buffer = true, desc = "AtomLine: Filter Unfinished" })
 end
 
 -- [篩選未完成任務] 使用 Quickfix List
